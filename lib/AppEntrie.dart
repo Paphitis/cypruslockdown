@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +9,6 @@ enum Language {
 }
 
 const pref_id = "pref_id";
-const pref_extra = "pref_extra";
 const pref_post = "pref_post";
 const pref_lang = "pref_lang";
 
@@ -22,29 +22,21 @@ class _MyHomePageState extends State<MyHomePage> {
   String _reason;
   String _idNumber;
   String _postalCode;
-  String _extraReason;
   TextEditingController _controller;
   TextEditingController _controllerPostCode;
-  TextEditingController _controllerExtra;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   Language _language = Language.greek;
   bool _idError = false;
   bool _postalCodeError = false;
-  bool _extraReasonError = false;
   bool _reasonError = false;
   FocusNode _idFocus = FocusNode();
   FocusNode _postalFocus = FocusNode();
-  FocusNode _extraFocus = FocusNode();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = TextEditingController();
     _controllerPostCode = TextEditingController();
-    _controllerExtra = TextEditingController();
-    _canSendSMS();
-
     WidgetsBinding.instance.addPostFrameCallback((dou) {
       _getPrefs();
     });
@@ -67,7 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             centerTitle: true,
-            title: Text("Cyprus Lockdown", style: TextStyle(color: Colors.black, fontSize: 22),),
+            title: Column(
+              children: <Widget>[
+                Text("Cyprus Lockdown", style: TextStyle(color: Colors.black, fontSize: 20),),
+                Text( _language == Language.greek ?"Εργαλείο προετοιμασίας SMS":"SMS preparation tool", style: TextStyle(color: Colors.grey, fontSize: 15),),
+              ],
+            ),
             actions: <Widget>[
               FlatButton(
                   onPressed: () async {
@@ -124,12 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 20,
               ),
-              if (_reason != null && _reason == "8") ...[
-                _getExtraReason(),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -286,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'Διακίνηση για παροχή βοήθειας σε άτομα που αδυνατούν να αυτοεξυπηρετηθούν ή που οφείλουν να αυτοπροστατευθούν ή βρίσκονται σε αυτοπεριορισμό ή/και σε χώρους υποχρεωτικού περιορισμού (καραντίνα)',
       'Μετακίνηση για σωματική άσκηση ή για τις ανάγκες κατοικίδιου ζώου, εφόσον δεν υπερβαίνουν τα δύο άτομα και περιορίζονται σε γειτνιάζουσες με την κατοικία τους περιοχές',
       'Μετάβαση σε τελετή (π.χ. κηδεία, γάμος, βάφτιση) από συγγενείς πρώτου και δεύτερου βαθμού που δεν υπερβαίνουν τον αριθμό των 10 προσώπων',
-      'Οποιοσδήποτε άλλος σκοπός μετακίνησης που μπορεί να δικαιολογηθεί με βάση τα μέτρα απαγόρευσης της κυκλοφορίας(Σε αυτή την περίπτωση, πέραν του αριθμού, θα πρέπει να αναγράφεται στο SMS o συγκεκριμένος λόγος)'
+      'Οποιοσδήποτε άλλος σκοπός μετακίνησης που μπορεί να δικαιολογηθεί με βάση τα μέτρα απαγόρευσης της κυκλοφορίας'
     ];
     List<String> _reasonsEN = [
       'Go to pharmacy or donate blood or visit a doctor',
@@ -296,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'To help people who are unable to self-serve or who need to protect themselves or are in self-restraint and / or in quarantine areas',
       'Moving for physical activity or for the needs of the pet, provided they do not exceed two persons and are confined to areas adjacent to their home',
       'Going to a ceremony (eg funeral, marriage, baptism) by first and second degree relatives not exceeding 10 persons',
-      'Any other purpose of travel which may be justified by the prohibition measures (In this case, in addition to the number, the reason must be stated in the SMS)'
+      'Any other purpose of travel which may be justified by the prohibition measures '
     ];
 
     _globalKey.currentState
@@ -364,6 +355,10 @@ class _MyHomePageState extends State<MyHomePage> {
       child: TextFormField(
         focusNode: _idFocus,
         textInputAction: TextInputAction.next,
+        inputFormatters:[
+          LengthLimitingTextInputFormatter(10),
+          WhitelistingTextInputFormatter(RegExp("^[A-Za-zα-ωΑ-Ω]*\$")),
+        ] ,
         onFieldSubmitted: (item) {
           _idFocus.unfocus();
           FocusScope.of(context).requestFocus(_postalFocus);
@@ -390,18 +385,15 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextFormField(
         keyboardType: TextInputType.number,
+        inputFormatters:[
+          LengthLimitingTextInputFormatter(4),
+          BlacklistingTextInputFormatter(RegExp("^[/./,]")),
+        ] ,
         controller: _controllerPostCode,
         focusNode: _postalFocus,
-        textInputAction: (_reason != null && _reason == '8')
-            ? TextInputAction.next
-            : TextInputAction.done,
+        textInputAction: TextInputAction.done,
         onFieldSubmitted: (item) {
-          if (_reason != null && _reason == '8') {
-            _postalFocus.unfocus();
-            FocusScope.of(context).requestFocus(_extraFocus);
-          } else {
             _validate();
-          }
         },
         decoration: _getTextFieldDecoration(
             _language == Language.greek ? "Ταχυδρομικός Κώδικας" : "Postcode",
@@ -417,30 +409,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  _getExtraReason() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: TextField(
-        focusNode: _extraFocus,
-        onSubmitted: (item) {
-          _validate();
-        },
-        controller: _controllerExtra,
-        decoration: _getTextFieldDecoration(
-            _language == Language.greek
-                ? "Σκοπός μετακίνησης"
-                : "Purpose of travel",
-            _extraReasonError),
-        onChanged: (value) {
-          if (value != null && value.length != 0) {
-            setState(() {
-              _extraReasonError = false;
-            });
-          }
-        },
-      ),
-    );
-  }
+
 
   _getTextFieldDecoration(String label, bool showError) {
     return InputDecoration(
@@ -464,12 +433,10 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _idError = false;
       _postalCodeError = false;
-      _extraReasonError = false;
       _reasonError = false;
     });
     _idNumber = _controller.text.trim();
     _postalCode = _controllerPostCode.text.trim();
-    _extraReason = _controllerExtra.text.trim();
 
     if (_reason == null) {
       setState(() {
@@ -487,25 +454,42 @@ class _MyHomePageState extends State<MyHomePage> {
         _postalCodeError = true;
       });
     }
-    if (_reason != null && _reason == '8') {
-      if (_extraReason == null || _extraReason.length == 0) {
-        setState(() {
-          _extraReasonError = true;
-        });
-      }
-    }
-    if (!_reasonError && !_idError && !_postalCodeError && !_extraReasonError) {
+
+    if (!_reasonError && !_idError && !_postalCodeError) {
 
       SharedPreferences _prefs = await SharedPreferences.getInstance();
 
       _prefs.setString(pref_id, '$_idNumber');
       _prefs.setString(pref_post, '$_postalCode');
-      if ( _reason == '8') {
-        _prefs.setString(pref_extra, '$_extraReason');
-      }
 
-      _sendSMS("$_reason $_idNumber $_postalCode" +
-          (_reason == '8' ? " $_extraReason" : ""));
+       _canSendSMS().then((canSend){
+         String message = "$_reason $_idNumber $_postalCode";
+         if(canSend){
+           _sendSMS(message);
+         }else{
+
+           showDialog(context: context, builder: (context){
+
+             return AlertDialog(
+               title: Text(_language == Language.greek ? "Η συσκευή σας δεν μπορεί να στείλει sms" : "Your device can not send sms"),
+
+               content: Text("SMS : $message"),
+
+               actions: <Widget>[
+                 FlatButton(child: Text("OK"), onPressed: (){Navigator.of(context).pop();},),
+               ],
+
+             );
+
+
+           });
+
+         }
+
+       });
+
+
+
     }
   }
 
@@ -521,10 +505,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _canSendSMS() async {
+  Future<bool> _canSendSMS() async {
     bool _result = await canSendSMS();
-//    setState(() => _canSendSMSMessage =
     print(_result ? 'This unit can send SMS' : 'This unit cannot send SMS');
+    return _result;
   }
 
   void _getPrefs() async {
@@ -535,9 +519,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       if (_prefs.containsKey(pref_post)) {
         _controllerPostCode.text = _prefs.getString(pref_post);
-      }
-      if (_prefs.containsKey(pref_extra)) {
-        _controllerExtra.text = _prefs.getString(pref_extra);
       }
       if (_prefs.containsKey(pref_lang)) {
         _language = _prefs.getString(pref_lang) == 'GR' ? Language.greek : Language.english;
