@@ -39,16 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: _screen(),
-      ),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: _screen(),
     );
   }
 
@@ -380,31 +378,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _body() {
-    return ListView(
-      children: <Widget>[
-        if (_reasonError) ...[
+    return SafeArea(
+      child: ListView(
+        children: <Widget>[
+          if (_reasonError) ...[
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+                child: Text(
+              Localise.getString("reason_error"),
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            )),
+          ],
+          _getReason(),
           SizedBox(
             height: 20,
           ),
-          Center(
-              child: Text(
-            Localise.getString("reason_error"),
-            style: TextStyle(color: Colors.red, fontSize: 20),
-          )),
+          _getId(),
+          SizedBox(
+            height: 20,
+          ),
+          _getPostCode(),
+          SizedBox(
+            height: 20,
+          ),
         ],
-        _getReason(),
-        SizedBox(
-          height: 20,
-        ),
-        _getId(),
-        SizedBox(
-          height: 20,
-        ),
-        _getPostCode(),
-        SizedBox(
-          height: 20,
-        ),
-      ],
+      ),
     );
   }
 }
