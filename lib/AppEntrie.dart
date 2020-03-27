@@ -196,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _prefs.setString(pref_id, '$_idNumber');
       _prefs.setString(pref_post, '$_postalCode');
 
-      Util.canSendSMS().then((canSend) {
+      Util.canSend().then((canSend) {
         String message = "$_reason $_idNumber $_postalCode";
         if (canSend) {
           Util.send(message);

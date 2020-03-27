@@ -34,7 +34,7 @@ static send(String message) async {
   }
 }
 
-static Future<bool> canSendSMS() async {
+static Future<bool> canSend() async {
   bool _result = await canSendSMS();
   print(_result ? 'This unit can send SMS' : 'This unit cannot send SMS');
   return _result;
