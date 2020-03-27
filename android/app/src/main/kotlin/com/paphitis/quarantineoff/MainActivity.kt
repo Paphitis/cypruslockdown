@@ -1,4 +1,4 @@
-package com.paphitis.quarantineoff
+package com.paphitis.cypruslockdown
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
