@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:cypruslockdown/BottomSheetWidget.dart';
 import 'package:cypruslockdown/Locale/Languages.dart';
 import 'package:cypruslockdown/Preferences.dart';
 import 'package:cypruslockdown/RadioListWidget.dart';
 import 'package:cypruslockdown/Util.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -39,16 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: _screen(),
-      ),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: _screen(),
     );
   }
 
@@ -68,32 +66,94 @@ class _MyHomePageState extends State<MyHomePage> {
             : null,
         child: Column(
           children: <Widget>[
-
-            RadioListWidget(index: 1, title: "reason1_short", groupValue: _reason, onPressed:  (){_getBottomSheet(1);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-
-            RadioListWidget(index: 2, title: "reason2_short", groupValue: _reason, onPressed:  (){_getBottomSheet(2);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 3, title: "reason3_short", groupValue: _reason, onPressed:  (){_getBottomSheet(3);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 4, title: "reason4_short", groupValue: _reason, onPressed:  (){_getBottomSheet(4);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 5, title: "reason5_short", groupValue: _reason, onPressed:  (){_getBottomSheet(5);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 6, title: "reason6_short", groupValue: _reason, onPressed:  (){_getBottomSheet(6);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 7, title: "reason7_short", groupValue: _reason, onPressed:  (){_getBottomSheet(7);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 8, title: "reason8_short", groupValue: _reason, onPressed:  (){_getBottomSheet(8);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
+            RadioListWidget(
+              index: 1,
+              title: "reason1_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(1);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 2,
+              title: "reason2_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(2);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 3,
+              title: "reason3_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(3);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 4,
+              title: "reason4_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(4);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 5,
+              title: "reason5_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(5);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 6,
+              title: "reason6_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(6);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 7,
+              title: "reason7_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(7);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 8,
+              title: "reason8_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(8);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
           ],
         ),
       ),
@@ -103,7 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _getBottomSheet(int index) {
     _globalKey.currentState
       ..showBottomSheet<Null>((BuildContext context) {
-        return BottomSheetWidget(index: index,);
+        return BottomSheetWidget(
+          index: index,
+        );
       });
   }
 
@@ -198,6 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       Util.canSend().then((canSend) {
         String message = "$_reason $_idNumber $_postalCode";
+
         if (canSend) {
           Util.send(message);
         } else {
@@ -232,8 +295,6 @@ class _MyHomePageState extends State<MyHomePage> {
         _controllerPostCode.text = _prefs.getString(pref_post);
       }
       if (_prefs.containsKey(pref_lang)) {
-
-
         Localise.setLang(_prefs.getString(pref_lang) == 'GR'
             ? Language.greek
             : Language.english);
@@ -251,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _appBarTitle() {
-  return  Column(
+    return Column(
       children: <Widget>[
         Text(
           Localise.getString("title"),
@@ -283,10 +344,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
           SharedPreferences _prefs = await SharedPreferences.getInstance();
 
-
-          _prefs.setString(pref_lang, Localise.language == Language.greek
-              ? "GR"
-              : "EN");
+          _prefs.setString(
+              pref_lang, Localise.language == Language.greek ? "GR" : "EN");
         },
         child: Container(
             decoration: BoxDecoration(
@@ -294,9 +353,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.blue),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text( Localise.language == Language.greek
-                  ? "EN"
-                  : "GR",
+              child: Text(
+                Localise.language == Language.greek ? "EN" : "GR",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             )));
@@ -320,33 +378,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _body() {
-    return ListView(
-      children: <Widget>[
-        if (_reasonError) ...[
+    return SafeArea(
+      child: ListView(
+        children: <Widget>[
+          if (_reasonError) ...[
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+                child: Text(
+              Localise.getString("reason_error"),
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            )),
+          ],
+          _getReason(),
           SizedBox(
             height: 20,
           ),
-          Center(
-              child: Text(
-                Localise.getString("reason_error"),
-                style: TextStyle(color: Colors.red, fontSize: 20),
-              )),
+          _getId(),
+          SizedBox(
+            height: 20,
+          ),
+          _getPostCode(),
+          SizedBox(
+            height: 20,
+          ),
         ],
-        _getReason(),
-        SizedBox(
-          height: 20,
-        ),
-        _getId(),
-        SizedBox(
-          height: 20,
-        ),
-        _getPostCode(),
-        SizedBox(
-          height: 20,
-        ),
-      ],
+      ),
     );
   }
 }
-
-
