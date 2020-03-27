@@ -1,6 +1,6 @@
 # ![](android/app/src/main/res/mipmap-hdpi/ic_launcher.png) Cyprus Lockdown
 
-- During this time that our Country needs us to be patient and #stayathome.
+- During this time that our Country needs us to be patient and **#stayathome**.
 - This application is a tool that help you create the sms with correct format and data. 
 
 ### Steps to buld the app:
@@ -35,7 +35,7 @@ $flutter run
 - build an app bundle
 
 ```bash
-  $ flutter build appbundle --release --flavor hycm
+  $ flutter build appbundle --release
   ```
 ### Build release version of iOS app:
 
@@ -63,7 +63,7 @@ $flutter run
   - In Xcode, open Runner.xcworkspace in your app’s ios folder.
   - Select Product > Scheme > Runner.
   - Select Product > Destination > Generic iOS Device.
-  - Select *Runner* in the Xcode project navigator, then select the *hycm* target in the settings view sidebar.
+  - Select *Runner* in the Xcode project navigator, then select the *cypruslockdown* target in the settings view sidebar.
   - In the Identity section, update the Version to the user-facing version number you wish to publish.
   - In the Identity section, update the Build identifier to a unique build number used to track this build on App Store Connect. Each upload requires a unique build number.<br>
    
