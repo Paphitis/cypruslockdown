@@ -33,8 +33,10 @@ $flutter run
   
 - open terminal and navigate to the app directory
 - build an app bundle
+
+```bash
   $ flutter build appbundle --release --flavor hycm
-  
+  ```
 ### Build release version of iOS app:
 
 - select developer team<br>
@@ -52,8 +54,10 @@ $flutter run
 - close Xcode workspace
 - open terminal and navigate to the app directory
 - create a release build
-  $ flutter build ios --release --flavor hycm
-  
+
+```bash
+  $ flutter build ios --release
+  ```
 - re-open Xcode workspace<br><br>
   *In Xcode, configure the app version and build:*
   - In Xcode, open Runner.xcworkspace in your app’s ios folder.
