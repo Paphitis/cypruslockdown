@@ -357,7 +357,7 @@ class _MyHomePageState extends State<MyHomePage> {
         textInputAction: TextInputAction.next,
         inputFormatters:[
           LengthLimitingTextInputFormatter(10),
-          WhitelistingTextInputFormatter(RegExp("^[A-Za-zα-ωΑ-Ω]*\$")),
+          WhitelistingTextInputFormatter(RegExp("[A-Za-zα-ωΑ-Ω0-9]")),
         ] ,
         onFieldSubmitted: (item) {
           _idFocus.unfocus();
