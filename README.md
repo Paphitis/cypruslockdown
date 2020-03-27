@@ -1,6 +1,9 @@
-# Cyprus Lockdown
+# ![](android/app/src/main/res/mipmap-hdpi/ic_launcher.png) Cyprus Lockdown
+During this time that our Country needs us to be patient and #stayathome.
+This application is a tool that help you create the sms with correct format and data. 
 
-A new Flutter application.
+
+
 
 ## Getting Started
 
