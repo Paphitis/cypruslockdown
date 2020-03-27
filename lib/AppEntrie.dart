@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_sms/flutter_sms.dart';
-import 'package:quarantineoff/BottomSheetWidget.dart';
-import 'package:quarantineoff/Locale/Languages.dart';
-import 'package:quarantineoff/Preferences.dart';
-import 'package:quarantineoff/RadioListWidget.dart';
-import 'package:quarantineoff/Util.dart';
+import 'package:cypruslockdown/BottomSheetWidget.dart';
+import 'package:cypruslockdown/Locale/Languages.dart';
+import 'package:cypruslockdown/Preferences.dart';
+import 'package:cypruslockdown/RadioListWidget.dart';
+import 'package:cypruslockdown/Util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -233,9 +232,11 @@ class _MyHomePageState extends State<MyHomePage> {
         _controllerPostCode.text = _prefs.getString(pref_post);
       }
       if (_prefs.containsKey(pref_lang)) {
-        Localise.language = _prefs.getString(pref_lang) == 'GR'
+
+
+        Localise.setLang(_prefs.getString(pref_lang) == 'GR'
             ? Language.greek
-            : Language.english;
+            : Language.english);
       }
     });
   }
@@ -250,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _appBarTitle() {
-    Column(
+  return  Column(
       children: <Widget>[
         Text(
           Localise.getString("title"),
@@ -281,7 +282,11 @@ class _MyHomePageState extends State<MyHomePage> {
           });
 
           SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setString(pref_lang, Localise.getString("code"));
+
+
+          _prefs.setString(pref_lang, Localise.language == Language.greek
+              ? "GR"
+              : "EN");
         },
         child: Container(
             decoration: BoxDecoration(
@@ -289,8 +294,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.blue),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                Localise.getString("code"),
+              child: Text( Localise.language == Language.greek
+                  ? "EN"
+                  : "GR",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             )));

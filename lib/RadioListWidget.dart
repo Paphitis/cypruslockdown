@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quarantineoff/Locale/Languages.dart';
+import 'package:cypruslockdown/Locale/Languages.dart';
 
 class RadioListWidget extends StatelessWidget {
 

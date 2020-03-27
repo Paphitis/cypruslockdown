@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quarantineoff/AppEntrie.dart';
+import 'package:cypruslockdown/AppEntrie.dart';
 
 void main() => runApp(MyApp());
 
