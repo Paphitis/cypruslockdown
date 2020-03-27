@@ -1,11 +1,10 @@
+import 'package:cypruslockdown/BottomSheetWidget.dart';
+import 'package:cypruslockdown/Locale/Languages.dart';
+import 'package:cypruslockdown/Preferences.dart';
+import 'package:cypruslockdown/RadioListWidget.dart';
+import 'package:cypruslockdown/Util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_sms/flutter_sms.dart';
-import 'package:quarantineoff/BottomSheetWidget.dart';
-import 'package:quarantineoff/Locale/Languages.dart';
-import 'package:quarantineoff/Preferences.dart';
-import 'package:quarantineoff/RadioListWidget.dart';
-import 'package:quarantineoff/Util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -69,32 +68,94 @@ class _MyHomePageState extends State<MyHomePage> {
             : null,
         child: Column(
           children: <Widget>[
-
-            RadioListWidget(index: 1, title: "reason1_short", groupValue: _reason, onPressed:  (){_getBottomSheet(1);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-
-            RadioListWidget(index: 2, title: "reason2_short", groupValue: _reason, onPressed:  (){_getBottomSheet(2);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 3, title: "reason3_short", groupValue: _reason, onPressed:  (){_getBottomSheet(3);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 4, title: "reason4_short", groupValue: _reason, onPressed:  (){_getBottomSheet(4);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 5, title: "reason5_short", groupValue: _reason, onPressed:  (){_getBottomSheet(5);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 6, title: "reason6_short", groupValue: _reason, onPressed:  (){_getBottomSheet(6);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 7, title: "reason7_short", groupValue: _reason, onPressed:  (){_getBottomSheet(7);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
-            RadioListWidget(index: 8, title: "reason8_short", groupValue: _reason, onPressed:  (){_getBottomSheet(8);}, onChanged: (value) {
-              setSelectedRadioTile(value);
-            },),
+            RadioListWidget(
+              index: 1,
+              title: "reason1_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(1);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 2,
+              title: "reason2_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(2);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 3,
+              title: "reason3_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(3);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 4,
+              title: "reason4_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(4);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 5,
+              title: "reason5_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(5);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 6,
+              title: "reason6_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(6);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 7,
+              title: "reason7_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(7);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 8,
+              title: "reason8_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(8);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
           ],
         ),
       ),
@@ -104,7 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _getBottomSheet(int index) {
     _globalKey.currentState
       ..showBottomSheet<Null>((BuildContext context) {
-        return BottomSheetWidget(index: index,);
+        return BottomSheetWidget(
+          index: index,
+        );
       });
   }
 
@@ -322,9 +385,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Center(
               child: Text(
-                Localise.getString("reason_error"),
-                style: TextStyle(color: Colors.red, fontSize: 20),
-              )),
+            Localise.getString("reason_error"),
+            style: TextStyle(color: Colors.red, fontSize: 20),
+          )),
         ],
         _getReason(),
         SizedBox(
@@ -342,5 +405,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-

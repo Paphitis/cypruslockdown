@@ -1,12 +1,12 @@
+import 'package:cypruslockdown/Locale/Languages.dart';
 import 'package:flutter/material.dart';
-import 'package:quarantineoff/Locale/Languages.dart';
 
 class BottomSheetWidget extends StatelessWidget {
-
   final int index;
 
-  const BottomSheetWidget({ @required  this.index,
-  Key key,
+  const BottomSheetWidget({
+    @required this.index,
+    Key key,
   }) : super(key: key);
 
   @override
@@ -35,10 +35,10 @@ class BottomSheetWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Container(
                 child: Text(
-                  Localise.getString("reason${index}"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )),
+              Localise.getString("reason${index}"),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            )),
           ),
           SizedBox(
             height: 30,

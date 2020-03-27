@@ -1,5 +1,5 @@
+import 'package:cypruslockdown/AppEntrie.dart';
 import 'package:flutter/material.dart';
-import 'package:quarantineoff/AppEntrie.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,5 +15,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
