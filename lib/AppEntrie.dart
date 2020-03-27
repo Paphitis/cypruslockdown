@@ -297,9 +297,9 @@ class _MyHomePageState extends State<MyHomePage> {
         _controllerPostCode.text = _prefs.getString(pref_post);
       }
       if (_prefs.containsKey(pref_lang)) {
-        Localise.language = _prefs.getString(pref_lang) == 'GR'
+        Localise.setLang(_prefs.getString(pref_lang) == 'GR'
             ? Language.greek
-            : Language.english;
+            : Language.english);
       }
     });
   }
@@ -314,7 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _appBarTitle() {
-    Column(
+    return Column(
       children: <Widget>[
         Text(
           Localise.getString("title"),
@@ -345,7 +345,9 @@ class _MyHomePageState extends State<MyHomePage> {
           });
 
           SharedPreferences _prefs = await SharedPreferences.getInstance();
-          _prefs.setString(pref_lang, Localise.getString("code"));
+
+          _prefs.setString(
+              pref_lang, Localise.language == Language.greek ? "GR" : "EN");
         },
         child: Container(
             decoration: BoxDecoration(
@@ -354,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                Localise.getString("code"),
+                Localise.language == Language.greek ? "EN" : "GR",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             )));

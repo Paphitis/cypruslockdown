@@ -1,4 +1,5 @@
-# ![](android/app/src/main/res/mipmap-hdpi/ic_launcher.png) Cyprus Lockdown
+# ![](android/app/src/main/res/mipmap-hdpi/ic_launcher.png) Cyprus Lockdown 
+## **©Copyright 2020**
 
 - During this time that our Country needs us to be patient and **#stayathome**.
 - This application is a tool that help you create the sms with correct format and data. 

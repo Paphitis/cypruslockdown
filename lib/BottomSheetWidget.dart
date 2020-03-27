@@ -35,7 +35,7 @@ class BottomSheetWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Container(
                 child: Text(
-              Localise.getString("reason${index}"),
+              Localise.getString("reason$index"),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
             )),
