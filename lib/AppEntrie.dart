@@ -2,9 +2,11 @@ import 'package:cypruslockdown/BottomSheetWidget.dart';
 import 'package:cypruslockdown/Locale/Languages.dart';
 import 'package:cypruslockdown/Preferences.dart';
 import 'package:cypruslockdown/RadioListWidget.dart';
+import 'package:cypruslockdown/Theme/ThemeNotifier.dart';
 import 'package:cypruslockdown/Util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -149,6 +151,17 @@ class _MyHomePageState extends State<MyHomePage> {
               groupValue: _reason,
               onPressed: () {
                 _getBottomSheet(8);
+              },
+              onChanged: (value) {
+                setSelectedRadioTile(value);
+              },
+            ),
+            RadioListWidget(
+              index: 9,
+              title: "reason9_short",
+              groupValue: _reason,
+              onPressed: () {
+                _getBottomSheet(9);
               },
               onChanged: (value) {
                 setSelectedRadioTile(value);
@@ -304,8 +317,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _appBar() {
     return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
+      backgroundColor:
+          Provider.of<ThemeNotifier>(context).type == themeType.Dark
+              ? Colors.black
+              : Colors.white,
+      centerTitle: false,
       title: _appBarTitle(),
       actions: _appBarActions(),
     );
@@ -316,11 +332,15 @@ class _MyHomePageState extends State<MyHomePage> {
       children: <Widget>[
         Text(
           Localise.getString("title"),
-          style: TextStyle(color: Colors.black, fontSize: 20),
+          style: TextStyle(
+              color: Provider.of<ThemeNotifier>(context).type == themeType.Dark
+                  ? Colors.white
+                  : Colors.black,
+              fontSize: 20),
         ),
         Text(
           Localise.getString("subtitle"),
-          style: TextStyle(color: Colors.grey, fontSize: 15),
+          style: TextStyle(color: Colors.grey, fontSize: 14),
         ),
       ],
     );
@@ -328,6 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _appBarActions() {
     return <Widget>[
+      _themeChanger(),
       _languageButton(),
     ];
   }
@@ -406,5 +427,37 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  _themeChanger() {
+    return FlatButton(
+        onPressed: () async {
+          SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+          Provider.of<ThemeNotifier>(context, listen: false).toggle();
+          _prefs.setBool(
+              pref_theme,
+              (Provider.of<ThemeNotifier>(context, listen: false).type ==
+                      themeType.Dark)
+                  ? true
+                  : false);
+        },
+        child: Container(
+            width: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.blue,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              // child:
+              child: Icon(
+                (Provider.of<ThemeNotifier>(context, listen: false).type ==
+                        themeType.Light)
+                    ? Icons.nightlight_round
+                    : Icons.wb_sunny,
+                color: Colors.white,
+              ),
+            )));
   }
 }

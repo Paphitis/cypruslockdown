@@ -1,5 +1,7 @@
 import 'package:cypruslockdown/Locale/Languages.dart';
+import 'package:cypruslockdown/Theme/ThemeNotifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetWidget extends StatelessWidget {
   final int index;
@@ -14,7 +16,10 @@ class BottomSheetWidget extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: Provider.of<ThemeNotifier>(context, listen: true).type ==
+                  themeType.Dark
+              ? Colors.black
+              : Colors.grey[200],
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(18), topRight: Radius.circular(18))),
       child: Column(
