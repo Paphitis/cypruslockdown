@@ -1,5 +1,6 @@
 import 'package:cypruslockdown/BottomSheetWidget.dart';
 import 'package:cypruslockdown/Locale/Languages.dart';
+import 'package:cypruslockdown/Locale/LocaleNotifier.dart';
 import 'package:cypruslockdown/Preferences.dart';
 import 'package:cypruslockdown/RadioListWidget.dart';
 import 'package:cypruslockdown/Theme/ThemeNotifier.dart';
@@ -10,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  Language preSelectedLang;
+  MyHomePage({Key key, this.preSelectedLang}) : super(key: key);
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -31,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Localise.setLang(Language.greek);
     _controllerID = TextEditingController();
     _controllerPostCode = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((dou) {
@@ -307,11 +308,6 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_prefs.containsKey(pref_post)) {
         _controllerPostCode.text = _prefs.getString(pref_post);
       }
-      if (_prefs.containsKey(pref_lang)) {
-        Localise.setLang(_prefs.getString(pref_lang) == 'GR'
-            ? Language.greek
-            : Language.english);
-      }
     });
   }
 
@@ -321,8 +317,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Provider.of<ThemeNotifier>(context).type == themeType.Dark
               ? Colors.black
               : Colors.white,
-      centerTitle: false,
+      centerTitle: true,
       title: _appBarTitle(),
+      leading: _themeChanger(),
+      leadingWidth: 60,
       actions: _appBarActions(),
     );
   }
@@ -340,7 +338,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Text(
           Localise.getString("subtitle"),
-          style: TextStyle(color: Colors.grey, fontSize: 14),
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+          overflow: TextOverflow.visible,
         ),
       ],
     );
@@ -348,7 +350,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _appBarActions() {
     return <Widget>[
-      _themeChanger(),
       _languageButton(),
     ];
   }
@@ -356,17 +357,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _languageButton() {
     return FlatButton(
         onPressed: () async {
-          setState(() {
-            Language _language = Localise.language == Language.greek
-                ? Language.english
-                : Language.greek;
-            Localise.setLang(_language);
-          });
-
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
-
-          _prefs.setString(
-              pref_lang, Localise.language == Language.greek ? "GR" : "EN");
+          Provider.of<LocaleNotifier>(context, listen: false).toggle();
         },
         child: Container(
             decoration: BoxDecoration(
@@ -375,7 +366,10 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                Localise.language == Language.greek ? "EN" : "GR",
+                Provider.of<LocaleNotifier>(context, listen: true).language ==
+                        Language.greek
+                    ? "EN"
+                    : "GR",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             )));
@@ -430,34 +424,34 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _themeChanger() {
-    return FlatButton(
-        onPressed: () async {
-          SharedPreferences _prefs = await SharedPreferences.getInstance();
+    return IconButton(
+      onPressed: () async {
+        SharedPreferences _prefs = await SharedPreferences.getInstance();
 
-          Provider.of<ThemeNotifier>(context, listen: false).toggle();
-          _prefs.setBool(
-              pref_theme,
+        Provider.of<ThemeNotifier>(context, listen: false).toggle();
+        _prefs.setBool(
+            pref_theme,
+            (Provider.of<ThemeNotifier>(context, listen: false).type ==
+                    themeType.Dark)
+                ? true
+                : false);
+      },
+      icon: Container(
+          width: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.blue,
+          ),
+          child: Center(
+            child: Icon(
               (Provider.of<ThemeNotifier>(context, listen: false).type ==
-                      themeType.Dark)
-                  ? true
-                  : false);
-        },
-        child: Container(
-            width: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.blue,
+                      themeType.Light)
+                  ? Icons.nightlight_round
+                  : Icons.wb_sunny,
+              color: Colors.white,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              // child:
-              child: Icon(
-                (Provider.of<ThemeNotifier>(context, listen: false).type ==
-                        themeType.Light)
-                    ? Icons.nightlight_round
-                    : Icons.wb_sunny,
-                color: Colors.white,
-              ),
-            )));
+          )),
+      iconSize: 30,
+    );
   }
 }
